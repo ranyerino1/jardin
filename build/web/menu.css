@@ -1,0 +1,45 @@
+* {
+	padding: 0px;
+	margin: 0px;
+
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+body {
+	font-family: arial;
+	background: url("imagens/fundo-cinza.jpg");
+	background-size: 100%;
+}
+
+ul {
+	top: 70px;
+	position: absolute;
+	width: 100%;
+}
+
+img {
+	width: 40px;
+}
+
+nav {
+	background-color: #EAC3CD;
+	width: 270px;
+	height: 100%;
+	position: absolute;
+}
+
+a{
+	display: block;
+	padding: 20px 5px;
+	color: #AE56A6;
+    transition: all 0.5s;
+}
+
+a:hover{
+	background-color: rgb(176, 224, 230);
+	color: black;
+}
