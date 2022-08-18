@@ -21,6 +21,7 @@
         <nav>
             <ul>
                 <li><a href="">Inicio</a></li>
+                <li><a href="perfil.jsp">Perfil</a></li>
                 <li><a href="registrarUsuario.jsp">Registrar usuario</a></li>
                 <form method="post" action="Sesiones">
                     <input type="submit" value="Cerrar Sesion" >

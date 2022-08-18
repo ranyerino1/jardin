@@ -44,17 +44,29 @@ public class UsuarioControlador extends HttpServlet {
         String usuId = request.getParameter("textId");
         String usuLogin = request.getParameter("textLogin");
         String usuPassword = request.getParameter("textPassword");
+        String nombre_usuario1 = request.getParameter("nombre1");
+        String nombre_usuario2 = request.getParameter("nombre2");
+        String apellido_usuario1 = request.getParameter("apellido1");
+        String apellido_usuario2 = request.getParameter("apellido2");
+        String numDocument_usuario = request.getParameter("numDocu");
+        String tipo_usua = request.getParameter("tipoDocu");
+        String tele_usua = request.getParameter("numTel");
+        String direc_usua = request.getParameter("direcUsua");
+        String correo_usua = request.getParameter("correo");
+        String fechanaci_usua = request.getParameter("fecha");
         String Estado = "Activo";
         int opcion = Integer.parseInt(request.getParameter("opcion"));
 
         //2. ¿Quién tiene los datos d forma segura? VO
-        UsuarioVO usuVO = new UsuarioVO(usuId, usuLogin, usuPassword, Estado);
+        UsuarioVO usuVO = new UsuarioVO(usuId, usuLogin, usuPassword, nombre_usuario1, nombre_usuario2, apellido_usuario1,
+                apellido_usuario2, numDocument_usuario, tipo_usua, tele_usua, direc_usua,
+                correo_usua, fechanaci_usua, Estado);
 
         //3. ¿Quién hace las operaciones? DAO
         UsuarioDAO usuDAO = new UsuarioDAO(usuVO);
-        
+
         ServletContext context = getServletContext();
-        
+
         String host = context.getInitParameter("host");
         String puerto = context.getInitParameter("puerto");
         String usuarioCorreo = context.getInitParameter("usuarioCorreo");
@@ -69,8 +81,8 @@ public class UsuarioControlador extends HttpServlet {
                     String receptor = request.getParameter("textLogin");
                     String asunto = "Correo de Registro";
                     String contenido = "Bienvenido, su registro se realizo con exito su usuario es " + receptor;
-                    
-                   try {
+
+                    try {
 
                         PropiedadesCorreo.envioCorreo(host, puerto, usuarioCorreo, password, receptor, asunto, contenido);
                         resultadoMensaje = "El mensaje se envio de forma correcta";
@@ -79,11 +91,20 @@ public class UsuarioControlador extends HttpServlet {
                         resultadoMensaje = "Error al enviar el mensaje " + e.getMessage();
                     }
 
-                    
                 } else {
                     request.setAttribute("mensajeError", "el usuario NO se registro correctamente");
                 }
                 request.getRequestDispatcher("registrarUsuario.jsp").forward(request, response);
+                break;
+            case 5://completar perfil 
+                if (usuDAO.completarPerfil(nombre_usuario1, nombre_usuario2, apellido_usuario1, apellido_usuario2,
+                        numDocument_usuario, tipo_usua, tele_usua, direc_usua, correo_usua, fechanaci_usua, usuId)) {
+
+                    request.setAttribute("mensajeExito", "completaste tu perfil de manera exitosa");
+                } else {
+                    request.setAttribute("mensajeError", "lo sentimos revisa los campon nuevamente");
+                }
+                request.getRequestDispatcher("perfil.jsp").forward(request, response);
                 break;
             case 2: //actualizar Registro
                 if (usuDAO.actualizarRegistro()) {
@@ -104,7 +125,10 @@ public class UsuarioControlador extends HttpServlet {
             case 4:
                 if (usuDAO.inicioSesion(usuLogin, usuPassword)) {
                     HttpSession misesion = request.getSession(true);
-                    
+
+                    usuVO = new UsuarioVO(usuId, usuLogin, usuPassword, nombre_usuario1, nombre_usuario2, apellido_usuario1,
+                            apellido_usuario1, numDocument_usuario, tipo_usua, tele_usua, direc_usua,
+                            correo_usua, fechanaci_usua, Estado);
 
                     RolDAO rolDAO = new RolDAO();
                     RolVO rolVO = new RolVO();
@@ -115,7 +139,7 @@ public class UsuarioControlador extends HttpServlet {
                     }
                     String usuid = rolVO.getRolId();
                     String roltipo = rolVO.getRolTiPo();
-                    usuVO = new UsuarioVO(usuid, usuLogin, usuPassword, Estado);
+
                     misesion.setAttribute("datosUsuario", usuVO);
 
                     if (listaRol.size() > 1) {
@@ -126,9 +150,9 @@ public class UsuarioControlador extends HttpServlet {
                         request.getRequestDispatcher("admin.jsp").forward(request, response);
                     } else if (roltipo.equals("director")) {
                         request.getRequestDispatcher("director.jsp").forward(request, response);
-                    } else if(roltipo.equals("profesor")){
+                    } else if (roltipo.equals("profesor")) {
                         request.getRequestDispatcher("profesor.jsp").forward(request, response);
-                    } else if(roltipo.equals("alumno")){
+                    } else if (roltipo.equals("alumno")) {
                         request.getRequestDispatcher("alumno.jsp").forward(request, response);
                     }
                 } else {
@@ -136,7 +160,7 @@ public class UsuarioControlador extends HttpServlet {
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                 }
                 break;
-    }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

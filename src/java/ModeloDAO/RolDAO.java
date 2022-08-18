@@ -91,7 +91,7 @@ public class RolDAO extends ConexionBd implements Crud {
         try 
         {
             conexion = this.obtenerConexion();
-            sql = "SELECT usuario.ID_USUA, rol.NOM_ROL FROM rol INNER JOIN rolusua ON rol.ID_ROL = rolusua.ID_ROL INNER JOIN usuario ON rolusua.ID_USUA = usuario.ID_USUA WHERE usuario.NOM_USUA=?;";  
+            sql = "SELECT usuario.ID_USUA, rol.NOM_ROL FROM rol INNER JOIN rolusua ON rol.ID_ROL = rolusua.ID_ROL INNER JOIN usuario ON rolusua.ID_USUA = usuario.ID_USUA WHERE usuario.NOM_USUARIO=?;";  
             puente = conexion.prepareStatement(sql);
             puente.setString(1, usuLogin);
             mensajero = puente.executeQuery();

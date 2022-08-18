@@ -23,7 +23,7 @@ public class ConexionBd {
        driver="com.mysql.jdbc.Driver";
        user="root";
        password="";
-       dataBase="jardin";
+       dataBase="jardin2";
        urlBd = "jdbc:mysql://localhost:3306/"+dataBase;
                
                try {
